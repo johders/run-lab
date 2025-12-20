@@ -12,14 +12,9 @@ public class GarminActivityService(string jsonFilePath)
             throw new FileNotFoundException($"Activities JSON file not found at: {jsonFilePath}");
         }
 
-        using var stream = File.OpenRead(jsonFilePath);
+        using FileStream stream = File.OpenRead(jsonFilePath);
 
-        var options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        };
-
-        var wrapperArray = await JsonSerializer.DeserializeAsync<List<GarminActivities>>(stream, options);
+        var wrapperArray = await JsonSerializer.DeserializeAsync<List<GarminActivities>>(stream);
 
         if (wrapperArray is null)
         {
@@ -31,7 +26,7 @@ public class GarminActivityService(string jsonFilePath)
 
     public async Task<List<GarminActivity>> LoadRunsAsync()
     {
-        var allActivities = await LoadActivitiesAsync();
+        List<GarminActivity> allActivities = await LoadActivitiesAsync();
         return [.. allActivities.Where(a => a.IsRun)];
     }
 }

@@ -2,18 +2,26 @@
 using RunLab.Core.Models;
 using RunLab.Core.Services;
 
-var builder = new ConfigurationBuilder()
+IConfigurationBuilder builder = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
 IConfiguration config = builder.Build();
 
-var jsonPath = config["Garmin:ActivitiesPath"];
+string jsonPath = config["Garmin:ActivitiesPath"] ?? default!;
+string fitFileRoot = config["Garmin:FitFilesRoot"] ?? default!;
 
-GarminActivityService service = new (jsonPath);
+GarminActivityService activitiesService = new (jsonPath);
+GarminFitParser fitService = new (fitFileRoot);
 
-List<GarminActivity> allActivities = await service.LoadActivitiesAsync();
-List<GarminActivity> allRuns = await service.LoadRunsAsync();
+List<GarminFitActivity> myFitActivities = [.. fitService.LoadAllActivities()];
+HashSet<long> fitActivityIds = [.. myFitActivities.Select(fa => fa.Id)];
+
+
+List<GarminActivity> allActivities = await activitiesService.LoadActivitiesAsync();
+List<GarminActivity> allRuns = await activitiesService.LoadRunsAsync();
+List<GarminActivity> matchedRuns = [.. allRuns.Where(r => fitActivityIds.Contains(r.ActivityId))];
 
 Console.WriteLine($"Total activities: {allActivities.Count}");
 Console.WriteLine($"Total runs: {allRuns.Count}");
+
