@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="RunLab.Console/RunLab.Console.csproj" />
+  <Project Path="RunLab.Core/RunLab.Core.csproj" />
+</Solution>
