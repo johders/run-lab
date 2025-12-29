@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using RunLab.Core.Models;
+using RunLab.Core.Models.DTOs;
 using RunLab.Core.Services;
 
 IConfigurationBuilder builder = new ConfigurationBuilder()

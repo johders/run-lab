@@ -1,5 +1,5 @@
 ﻿using Dynastream.Fit;
-using RunLab.Core.Models;
+using RunLab.Core.Models.DTOs;
 using System.IO.Compression;
 
 namespace RunLab.Core.Services;

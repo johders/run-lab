@@ -1,4 +1,4 @@
-﻿using RunLab.Core.Models;
+﻿using RunLab.Core.Models.DTOs;
 using System.Text.Json;
 
 namespace RunLab.Core.Services;
