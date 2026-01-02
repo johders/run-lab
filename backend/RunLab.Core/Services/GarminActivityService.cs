@@ -27,6 +27,6 @@ public class GarminActivityService(string jsonFilePath)
     public async Task<List<GarminActivity>> LoadRunsAsync()
     {
         List<GarminActivity> allActivities = await LoadActivitiesAsync();
-        return [.. allActivities.Where(a => a.IsRun)];
+        return [.. allActivities.Where(a => a.ActivityType == "running")];
     }
 }

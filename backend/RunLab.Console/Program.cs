@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using RunLab.Core.Models;
 using RunLab.Core.Models.DTOs;
 using RunLab.Core.Services;
 
@@ -24,4 +25,13 @@ List<GarminActivity> matchedRuns = [.. allRuns.Where(r => fitActivityIds.Contain
 
 Console.WriteLine($"Total activities: {allActivities.Count}");
 Console.WriteLine($"Total runs: {allRuns.Count}");
+
+List<GarminRunActivity> summarizedRuns = [];
+
+foreach (GarminActivity run in matchedRuns)
+{
+    summarizedRuns.Add(RunActivityMapper.ToGarminRunActivity(run));
+}
+
+Console.WriteLine();
 
