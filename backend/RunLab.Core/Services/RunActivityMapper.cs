@@ -6,14 +6,11 @@ namespace RunLab.Core.Services;
 
 public static class RunActivityMapper
 {
-    public static List<GarminRunActivity> ToGarminRunActivities(this List<GarminActivity> activities)
-    {
-        return [.. activities.Select(a => ToGarminRunActivity(a))];
-    }
-    public static GarminRunActivity ToGarminRunActivity(this GarminActivity activity)
+    public static GarminRunActivity ToGarminRunActivity(this GarminActivity activity, GarminFitActivity fitRecords)
     {
         return new GarminRunActivity
         {
+            ActivityId = activity.ActivityId,
             Metadata = new ActivityMetaData
             {
                 Name = activity.Name,
@@ -121,7 +118,8 @@ public static class RunActivityMapper
                     MinLongitude = activity.MinLongitude,
                     MaxLongitude = activity.MaxLongitude
                 }
-            }
+            },
+            FitRecords = fitRecords
         };
     }
 }

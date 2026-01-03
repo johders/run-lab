@@ -18,5 +18,5 @@ public class GarminRunActivity
     public EnergySummary Energy { get; init; } = default!;
     public LocationSummary Location { get; init; } = default!;
 
-    public IReadOnlyList<GarminFitRecord> Records { get; init; } = [];
+    public GarminFitActivity FitRecords { get; init; } = default!;
 }
