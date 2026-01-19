@@ -14,5 +14,11 @@ string fitFileRoot = config["Garmin:FitFilesRoot"] ?? default!;
 GarminActivityService activitiesService = new (jsonPath, fitFileRoot);
 List<GarminRunActivity> allRuns = await activitiesService.LoadRunsAsync();
 
-Console.WriteLine();
+FitCalculationService calculator = new();
+
+foreach (GarminRunActivity run in allRuns)
+{
+    double HRDcoupling = calculator.CalculatePowerDecoupling(run.FitData.Records);
+    Console.WriteLine($"Run: {run.ActivityId} - HR Decoupling: {HRDcoupling}");
+}
 

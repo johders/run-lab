@@ -119,7 +119,7 @@ public static class RunActivityMapper
                     MaxLongitude = activity.MaxLongitude
                 }
             },
-            FitRecords = fitRecords
+            FitData = fitRecords
         };
     }
 }
