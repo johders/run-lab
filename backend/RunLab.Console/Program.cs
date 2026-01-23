@@ -14,11 +14,11 @@ string fitFileRoot = config["Garmin:FitFilesRoot"] ?? default!;
 GarminActivityService activitiesService = new (jsonPath, fitFileRoot);
 List<GarminRunActivity> allRuns = await activitiesService.LoadRunsAsync();
 
-FitCalculationService calculator = new();
-
 foreach (GarminRunActivity run in allRuns)
 {
-    double HRDcoupling = calculator.CalculatePowerDecoupling(run.FitData.Records);
-    Console.WriteLine($"Run: {run.ActivityId} - HR Decoupling: {HRDcoupling}");
+    double HRDcoupling = FitCalculationService.CalculatePowerDecoupling(run.FitData.Records);
+    double CadenceDegradation = FitCalculationService.CalculateCadenceDegradation(run.FitData.Records);
+    double GradeAdjustedPace = FitCalculationService.CalculateAverageGradeAdjustedPace(run.FitData.Records);
+    Console.WriteLine($"Run: {run.ActivityId} - HR Decoupling: {HRDcoupling} - CadenceDegradation: {CadenceDegradation} - GradeAdjustedPace: {GradeAdjustedPace}");
 }
 
