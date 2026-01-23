@@ -6,10 +6,7 @@ public class FitCalculationService
 {
     public double CalculatePowerDecoupling(List<GarminFitRecord> records)
     {
-        List<GarminFitRecord> validRecords = [.. records
-            .Where(r => r.Power > 0 && r.HeartRate > 0)
-            .OrderBy(r => r.Timestamp!.GetDateTime())
-            .Skip(600)];
+        List<GarminFitRecord> validRecords = GetValidRecords(records);
 
         if (validRecords.Count < 1200) return 0;
 
@@ -26,6 +23,22 @@ public class FitCalculationService
         double decoupling = ((ef1 - ef2) / ef1) * 100;
         //return Math.Max(0, decoupling);
         return decoupling;
+    }
+
+    public double CalculateCadenceDegradation(List<GarminFitRecord> records)
+    {
+        List<GarminFitRecord> validRecords = GetValidRecords(records);
+
+        if (validRecords.Count < 1200) return 0;
+
+        int midpoint = validRecords.Count / 2;
+
+        double firstHalfAverageCadence = validRecords.Take(midpoint).Average(r => r.Cadence);
+        double secondHalfAverageCadence = validRecords.Skip(midpoint).Average(r => r.Cadence);
+
+        if (firstHalfAverageCadence <= 0 || secondHalfAverageCadence <= 0) return 0;
+
+        return ((firstHalfAverageCadence - secondHalfAverageCadence) / firstHalfAverageCadence) * 100;
     }
 
     private double CalculateNormalizedPower(List<GarminFitRecord> segment)
@@ -64,5 +77,13 @@ public class FitCalculationService
         double avgHeartRate = segment.Average(r => r.HeartRate);
         double normPower = CalculateNormalizedPower(segment);
         return normPower / avgHeartRate;
+    }
+
+    private List<GarminFitRecord> GetValidRecords(List<GarminFitRecord> records)
+    {
+        return [.. records
+            .Where(r => r.Power > 0 && r.HeartRate > 0 && r.Cadence > 0)
+            .OrderBy(r => r.Timestamp!.GetDateTime())
+            .Skip(600)];
     }
 }
