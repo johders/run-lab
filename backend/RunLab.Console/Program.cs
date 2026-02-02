@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using RunLab.Core.Models;
+using RunLab.Core.Models.ML;
 using RunLab.Core.Services;
 
 IConfigurationBuilder builder = new ConfigurationBuilder()
@@ -13,12 +14,16 @@ string fitFileRoot = config["Garmin:FitFilesRoot"] ?? default!;
 
 GarminActivityService activitiesService = new (jsonPath, fitFileRoot);
 List<GarminRunActivity> allRuns = await activitiesService.LoadRunsAsync();
+List<RunMLFeatures> mlFeatures = [];
 
 foreach (GarminRunActivity run in allRuns)
 {
-    double HRDcoupling = FitCalculationService.CalculatePowerDecoupling(run.FitData.Records);
-    double CadenceDegradation = FitCalculationService.CalculateCadenceDegradation(run.FitData.Records);
-    double GradeAdjustedPace = FitCalculationService.CalculateAverageGradeAdjustedPace(run.FitData.Records);
-    Console.WriteLine($"Run: {run.ActivityId} - HR Decoupling: {HRDcoupling} - CadenceDegradation: {CadenceDegradation} - GradeAdjustedPace: {GradeAdjustedPace}");
+    double hrDcoupling = FitCalculationService.CalculatePowerDecoupling(run.FitData.Records);
+    double cadenceDegradation = FitCalculationService.CalculateCadenceDegradation(run.FitData.Records);
+    double gradeAdjustedPace = FitCalculationService.CalculateAverageGradeAdjustedPace(run.FitData.Records);
+    
+    mlFeatures.Add(new RunMLFeatures(run.ActivityId, run.FitData.StartTime.GetDateTime(), hrDcoupling, cadenceDegradation, gradeAdjustedPace));
+
+    Console.WriteLine($"Run: {run.ActivityId} - HR Decoupling: {hrDcoupling} - CadenceDegradation: {cadenceDegradation} - GradeAdjustedPace: {gradeAdjustedPace}");
 }
 
