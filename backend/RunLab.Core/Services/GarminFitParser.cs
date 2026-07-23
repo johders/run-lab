@@ -1,4 +1,5 @@
 ﻿using Dynastream.Fit;
+using RunLab.Core.Extensions;
 using RunLab.Core.Models.DTOs;
 using System.IO.Compression;
 
@@ -78,8 +79,8 @@ public class GarminFitParser
                             HeartRate = recordMesg.GetHeartRate() ?? 0,
                             Cadence = recordMesg.GetCadence() ?? 0,
                             Power = recordMesg.GetPower() ?? 0,
-                            Latitude = (recordMesg.GetPositionLat() ?? 0) / 1e7,
-                            Longitude = (recordMesg.GetPositionLong() ?? 0) / 1e7,
+                            Latitude = recordMesg.GetPositionLat().ToDegrees(),
+                            Longitude = recordMesg.GetPositionLong().ToDegrees(),
                             Altitude = recordMesg.GetEnhancedAltitude() ?? 0
                         };
                         activity.Records.Add(record);
