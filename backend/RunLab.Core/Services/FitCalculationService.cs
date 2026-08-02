@@ -112,7 +112,7 @@ public class FitCalculationService
             .Skip(WarmupSeconds)];
     }
 
-    private static double HaversineDistanceMeters(double lat1, double lon1, double lat2, double lon2)
+    public static double HaversineDistanceMeters(double lat1, double lon1, double lat2, double lon2)
     {
         const double R = 6371000;
         double dLat = (lat2 - lat1) * Math.PI / 180;
@@ -132,7 +132,13 @@ public class FitCalculationService
 
     private static double CalculateGapForSegment(GarminFitRecord prev, GarminFitRecord curr)
     {
-        double distance = HaversineDistanceMeters(prev.Latitude, prev.Longitude, curr.Latitude, curr.Longitude);
+        if (prev.GeoPosition is null || curr.GeoPosition is null)
+        {
+            return 0;
+        }
+
+        double distance = HaversineDistanceMeters(prev.GeoPosition.Latitude, prev.GeoPosition.Longitude, 
+            curr.GeoPosition.Latitude, curr.GeoPosition.Longitude);
         if (distance < 0.5) return 0;
 
         double timeSeconds = (curr.Timestamp!.GetDateTime() - prev.Timestamp!.GetDateTime()).TotalSeconds;
@@ -145,7 +151,7 @@ public class FitCalculationService
         return speed / multiplier;
     }
 
-    private static double Median(IEnumerable<double> values)
+    public static double Median(IEnumerable<double> values)
     {
         var sorted = values.OrderBy(v => v).ToArray();
         int n = sorted.Length;

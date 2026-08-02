@@ -79,8 +79,9 @@ public class GarminFitParser
                             HeartRate = recordMesg.GetHeartRate() ?? 0,
                             Cadence = recordMesg.GetCadence() ?? 0,
                             Power = recordMesg.GetPower() ?? 0,
-                            Latitude = recordMesg.GetPositionLat().ToDegrees(),
-                            Longitude = recordMesg.GetPositionLong().ToDegrees(),
+                            GeoPosition = FitConverter.ToGeoPosition(
+                                recordMesg.GetPositionLat(), 
+                                recordMesg.GetPositionLong()),
                             Altitude = recordMesg.GetEnhancedAltitude() ?? 0
                         };
                         activity.Records.Add(record);

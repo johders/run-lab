@@ -6,7 +6,6 @@ public sealed class GarminFitRecord
     public byte HeartRate { get; init; }
     public byte Cadence { get; init; }
     public ushort Power { get; init; }
-    public double Latitude { get; init; }
-    public double Longitude { get; init; }
     public float Altitude { get; init; }
+    public GeoPosition? GeoPosition { get; init; }
 }
