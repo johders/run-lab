@@ -1,8 +1,9 @@
-﻿using RunLab.Core.Models.DTOs;
+﻿using RunLab.Core.Common;
+using RunLab.Core.Garmin.DTOs;
 
-namespace RunLab.Core.Services;
+namespace RunLab.Core.Metrics;
 
-public class FitCalculationService
+public static class RunMetrics
 {
     private const int WarmupSeconds = 600;
     private const int MinimumRecords = 1200;
@@ -63,7 +64,7 @@ public class FitCalculationService
         if (gapSpeeds.Count == 0)
             return double.NaN;
 
-        return Median(gapSpeeds);
+        return Statistics.Median(gapSpeeds);
     }
 
     private static double CalculateNormalizedPower(List<GarminFitRecord> segment)
@@ -112,18 +113,6 @@ public class FitCalculationService
             .Skip(WarmupSeconds)];
     }
 
-    public static double HaversineDistanceMeters(double lat1, double lon1, double lat2, double lon2)
-    {
-        const double R = 6371000;
-        double dLat = (lat2 - lat1) * Math.PI / 180;
-        double dLon = (lon2 - lon1) * Math.PI / 180;
-        double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-                   Math.Cos(lat1 * Math.PI / 180) * Math.Cos(lat2 * Math.PI / 180) *
-                   Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
-        double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-        return R * c;
-    }
-
     private static double GradeEnergyMultiplier(double grade)
     {
         grade = Math.Clamp(grade, -0.25, 0.25);
@@ -137,9 +126,7 @@ public class FitCalculationService
             return 0;
         }
 
-        double distance = HaversineDistanceMeters(prev.GeoPosition.Latitude, prev.GeoPosition.Longitude, 
-            curr.GeoPosition.Latitude, curr.GeoPosition.Longitude);
-        if (distance < 0.5) return 0;
+        double distance = Geo.HaversineDistanceMeters(prev.GeoPosition, curr.GeoPosition);
 
         double timeSeconds = (curr.Timestamp!.GetDateTime() - prev.Timestamp!.GetDateTime()).TotalSeconds;
         if (timeSeconds <= 0) return 0;
@@ -149,14 +136,5 @@ public class FitCalculationService
         double multiplier = GradeEnergyMultiplier(grade);
 
         return speed / multiplier;
-    }
-
-    public static double Median(IEnumerable<double> values)
-    {
-        var sorted = values.OrderBy(v => v).ToArray();
-        int n = sorted.Length;
-        if (n == 0) return double.NaN;
-        if (n % 2 == 1) return sorted[n / 2];
-        return (sorted[n / 2 - 1] + sorted[n / 2]) / 2.0;
     }
 }

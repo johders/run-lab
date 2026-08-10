@@ -1,5 +1,5 @@
-﻿using RunLab.Core.Models.ActivitySummaries;
-using RunLab.Core.Models.DTOs;
+﻿using RunLab.Core.Garmin.DTOs;
+using RunLab.Core.Models.ActivitySummaries;
 
 namespace RunLab.Core.Models;
 

@@ -1,8 +1,8 @@
-﻿using RunLab.Core.Models;
+﻿using RunLab.Core.Garmin.DTOs;
+using RunLab.Core.Models;
 using RunLab.Core.Models.ActivitySummaries;
-using RunLab.Core.Models.DTOs;
 
-namespace RunLab.Core.Services;
+namespace RunLab.Core.Garmin;
 
 public static class RunActivityMapper
 {

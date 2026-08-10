@@ -1,4 +1,4 @@
-﻿using RunLab.Core.Models.DTOs;
+﻿using RunLab.Core.Models;
 
 namespace RunLab.Core.Extensions;
 

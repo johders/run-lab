@@ -1,2 +1,2 @@
-﻿namespace RunLab.Core.Models.DTOs;
+﻿namespace RunLab.Core.Models;
 public record GeoPosition(double Latitude, double Longitude);

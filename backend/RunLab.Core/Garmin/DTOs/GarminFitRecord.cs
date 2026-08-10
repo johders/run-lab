@@ -1,4 +1,6 @@
-﻿namespace RunLab.Core.Models.DTOs;
+﻿using RunLab.Core.Models;
+
+namespace RunLab.Core.Garmin.DTOs;
 
 public sealed class GarminFitRecord
 {

@@ -1,8 +1,8 @@
-﻿using RunLab.Core.Models;
-using RunLab.Core.Models.DTOs;
+﻿using RunLab.Core.Garmin.DTOs;
+using RunLab.Core.Models;
 using System.Text.Json;
 
-namespace RunLab.Core.Services;
+namespace RunLab.Core.Garmin;
 
 public class GarminActivityService
 {

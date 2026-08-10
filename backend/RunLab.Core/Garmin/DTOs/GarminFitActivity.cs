@@ -1,4 +1,4 @@
-﻿namespace RunLab.Core.Models.DTOs;
+﻿namespace RunLab.Core.Garmin.DTOs;
 
 public class GarminFitActivity
 {

@@ -1,9 +1,9 @@
 ﻿using Dynastream.Fit;
 using RunLab.Core.Extensions;
-using RunLab.Core.Models.DTOs;
+using RunLab.Core.Garmin.DTOs;
 using System.IO.Compression;
 
-namespace RunLab.Core.Services;
+namespace RunLab.Core.Garmin;
 
 public class GarminFitParser
 {
