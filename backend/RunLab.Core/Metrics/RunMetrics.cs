@@ -6,10 +6,14 @@ namespace RunLab.Core.Metrics;
 public static class RunMetrics
 {
     private const int WarmupSeconds = 600;
+    private const int CoolDownSeconds = 600;
     private const int MinimumRecords = 1200;
     public static double CalculatePowerDecoupling(List<GarminFitRecord> records)
     {
-        List<GarminFitRecord> validRecords = GetValidRecords(records);
+        if (records.Count < 3600)
+            return double.NaN;
+
+        List<GarminFitRecord> validRecords = [.. GetValidRecords(records).Skip(WarmupSeconds).SkipLast(CoolDownSeconds)];
 
         if (validRecords.Count < MinimumRecords) 
             return double.NaN;
@@ -25,13 +29,12 @@ public static class RunMetrics
             return double.NaN;
 
         double decoupling = ((ef1 - ef2) / ef1) * 100;
-        //return Math.Max(0, decoupling);
         return decoupling;
     }
 
     public static double CalculateCadenceDegradation(List<GarminFitRecord> records)
     {
-        List<GarminFitRecord> validRecords = GetValidRecords(records);
+        List<GarminFitRecord> validRecords = [ .. GetValidRecords(records).Skip(WarmupSeconds)];
 
         if (validRecords.Count < MinimumRecords)
             return double.NaN;
@@ -49,7 +52,7 @@ public static class RunMetrics
 
     public static double CalculateAverageGradeAdjustedPace(List<GarminFitRecord> records)
     {
-        List<GarminFitRecord> validRecords = GetValidRecords(records);
+        List<GarminFitRecord> validRecords = [.. GetValidRecords(records)];
 
         if (validRecords.Count < 2)
             return double.NaN;
@@ -105,12 +108,11 @@ public static class RunMetrics
         return normPower / avgHeartRate;
     }
 
-    private static List<GarminFitRecord> GetValidRecords(List<GarminFitRecord> records)
+    private static IEnumerable<GarminFitRecord> GetValidRecords(List<GarminFitRecord> records)
     {
         return [.. records
             .Where(r => r.Power > 0 && r.HeartRate > 0 && r.Cadence > 0)
-            .OrderBy(r => r.Timestamp!.GetDateTime())
-            .Skip(WarmupSeconds)];
+            .OrderBy(r => r.Timestamp!.GetDateTime())];
     }
 
     private static double GradeEnergyMultiplier(double grade)

@@ -1,9 +1,9 @@
-﻿using RunLab.Core.Extensions;
+﻿using RunLab.Core.Garmin;
 using RunLab.Core.Models;
 
-namespace RunLab.Tests;
+namespace RunLab.Tests.Garmin;
 
-public class GeoTests
+public class FitConverterTests
 {
     [Fact]
     public void ToDegrees_WithNullValue_ReturnsNull()

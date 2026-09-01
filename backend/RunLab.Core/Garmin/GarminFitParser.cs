@@ -1,5 +1,4 @@
 ﻿using Dynastream.Fit;
-using RunLab.Core.Extensions;
 using RunLab.Core.Garmin.DTOs;
 using System.IO.Compression;
 
@@ -31,7 +30,7 @@ public class GarminFitParser
         }
     }
 
-    private IEnumerable<GarminFitActivity> ExtractAndParseFit(string zipPath)
+    private static IEnumerable<GarminFitActivity> ExtractAndParseFit(string zipPath)
     {
         using ZipArchive zip = ZipFile.OpenRead(zipPath);
         foreach (ZipArchiveEntry entry in zip.Entries.Where(e => e.FullName.EndsWith(".fit", StringComparison.OrdinalIgnoreCase)))

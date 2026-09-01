@@ -1,6 +1,6 @@
 ﻿using RunLab.Core.Common;
 
-namespace RunLab.Tests;
+namespace RunLab.Tests.Common;
 
 public class StatisticsTests
 {

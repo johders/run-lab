@@ -1,9 +1,9 @@
 ﻿using RunLab.Core.Common;
 using RunLab.Core.Models;
 
-namespace RunLab.Tests;
+namespace RunLab.Tests.Common;
 
-public class RunMetricsTests
+public class GeoTests
 {
     [Theory]
     [InlineData(0, 0, 0, 0, 0)]

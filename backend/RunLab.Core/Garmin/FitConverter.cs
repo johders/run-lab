@@ -1,6 +1,6 @@
 ﻿using RunLab.Core.Models;
 
-namespace RunLab.Core.Extensions;
+namespace RunLab.Core.Garmin;
 
 public static class FitConverter
 {
